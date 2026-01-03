@@ -3,183 +3,263 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS AI</title>
-
+<title>JARVIS – Tony Stark AI</title>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', sans-serif;
-    }
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
 
-    body {
-        background: radial-gradient(circle at top, #0f2027, #000);
-        color: #00eaff;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+/* Body & Background */
+body{
+  margin:0;
+  font-family:'Orbitron',sans-serif;
+  background:#000;
+  color:#00ffea;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:start;
+}
 
-    .jarvis {
-        width: 95%;
-        max-width: 400px;
-        text-align: center;
-        padding: 25px;
-        border-radius: 20px;
-        background: rgba(0, 0, 0, 0.6);
-        box-shadow: 0 0 25px rgba(0, 234, 255, 0.3);
-    }
+/* Title */
+h1{
+  margin:20px;
+  font-size:2.5rem;
+  text-shadow:0 0 20px #00ffea;
+  text-align:center;
+}
 
-    .ring {
-        width: 180px;
-        height: 180px;
-        margin: 20px auto;
-        border-radius: 50%;
-        border: 4px solid transparent;
-        border-top: 4px solid #00eaff;
-        border-bottom: 4px solid #00eaff;
-        animation: spin 3s linear infinite;
-        box-shadow: 0 0 25px #00eaff;
-    }
+/* Status */
+#status{
+  font-size:1.2rem;
+  margin:10px;
+  text-shadow:0 0 10px #00ffea;
+  text-align:center;
+}
 
-    @keyframes spin {
-        100% { transform: rotate(360deg); }
-    }
+/* Button */
+button{
+  border:2px solid #00ffea;
+  background:transparent;
+  color:#00ffea;
+  padding:15px 30px;
+  font-size:1rem;
+  border-radius:12px;
+  margin:10px;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  box-shadow:0 0 20px #00ffea40;
+}
+button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 35px #00ffea80;
+}
 
-    h1 {
-        letter-spacing: 3px;
-        margin-bottom: 10px;
-    }
+/* Mic Wave */
+#mic-wave{
+  width:80%;
+  max-width:400px;
+  height:80px;
+  margin:20px auto;
+  border-radius:40px;
+  background:#00ffea10;
+  overflow:hidden;
+  position:relative;
+}
+.wave{
+  position:absolute;
+  bottom:0;
+  width:5px;
+  background:#00ffea;
+  animation:wave 1s linear infinite;
+  height:20px;
+}
+@keyframes wave{
+  0%{height:20px;opacity:0.3;}
+  50%{height:60px;opacity:1;}
+  100%{height:20px;opacity:0.3;}
+}
 
-    #status {
-        font-size: 14px;
-        opacity: 0.9;
-        min-height: 20px;
-    }
+/* HUD Elements */
+#hud{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  overflow:hidden;
+}
+.circle{
+  position:absolute;
+  border:2px solid #00ffea55;
+  border-radius:50%;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(0.8);opacity:0.3;}
+  50%{transform:scale(1.2);opacity:0.7;}
+  100%{transform:scale(0.8);opacity:0.3;}
+}
+.radar{
+  position:absolute;
+  width:200%;
+  height:200%;
+  border:1px solid #00ffea20;
+  border-radius:50%;
+  animation:rotate 6s linear infinite;
+}
+@keyframes rotate{
+  0%{transform:rotate(0deg);}
+  100%{transform:rotate(360deg);}
+}
 
-    button {
-        margin-top: 20px;
-        padding: 14px 28px;
-        font-size: 16px;
-        background: transparent;
-        color: #00eaff;
-        border: 2px solid #00eaff;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: 0.3s;
-        position: relative;
-        overflow: hidden;
-    }
+/* Floating lines */
+.line{
+  position:absolute;
+  width:2px;
+  height:100%;
+  background:#00ffea10;
+  animation:blink 2s linear infinite;
+}
+@keyframes blink{
+  0%{opacity:0.1;}
+  50%{opacity:0.7;}
+  100%{opacity:0.1;}
+}
 
-    button::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: #00eaff;
-        opacity: 0;
-        transition: 0.3s;
-    }
-
-    button:hover::before {
-        opacity: 0.15;
-    }
-
-    button:active {
-        transform: scale(0.95);
-        box-shadow: 0 0 20px #00eaff;
-    }
-
-    footer {
-        margin-top: 15px;
-        font-size: 12px;
-        opacity: 0.6;
-    }
+@media(max-width:600px){
+  h1{font-size:2rem;}
+  button{padding:12px 25px;font-size:0.9rem;}
+  #mic-wave{height:60px;}
+}
 </style>
 </head>
-
 <body>
 
-<div class="jarvis">
-    <h1>JARVIS</h1>
-    <div class="ring"></div>
-    <p id="status">System Idle</p>
-    <button onclick="startJarvis()">ACTIVATE JARVIS</button>
-    <footer>AI Assistant Online</footer>
-</div>
+<h1>JARVIS – Tony Stark AI</h1>
+<div id="status">Say "Hey Jarvis" or tap ACTIVATE</div>
+<button id="activateBtn">ACTIVATE JARVIS</button>
+<div id="mic-wave"></div>
+<div id="hud"></div>
 
 <script>
-    const status = document.getElementById("status");
+// --- Mic waves ---
+const micWave=document.getElementById("mic-wave");
+function createWaves(){
+  micWave.innerHTML="";
+  for(let i=0;i<50;i++){
+    const bar=document.createElement("div");
+    bar.className="wave";
+    bar.style.left=(i*8)+"px";
+    bar.style.animationDelay=(i*0.05)+"s";
+    micWave.appendChild(bar);
+  }
+}
+createWaves();
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
+// --- HUD circles & radar & lines ---
+const hud=document.getElementById("hud");
+// Circles
+for(let i=0;i<6;i++){
+  const c=document.createElement("div");
+  c.className="circle";
+  c.style.width=c.style.height=(100+i*50)+"px";
+  c.style.top=c.style.left=(50+i*20)+"px";
+  c.style.animationDuration=(2+i*0.5)+"s";
+  hud.appendChild(c);
+}
+// Radar
+const radar=document.createElement("div");
+radar.className="radar";
+radar.style.top="-50%";
+radar.style.left="-50%";
+hud.appendChild(radar);
+// Lines
+for(let i=0;i<15;i++){
+  const l=document.createElement("div");
+  l.className="line";
+  l.style.left=(i*70)+"px";
+  l.style.animationDelay=(i*0.1)+"s";
+  hud.appendChild(l);
+}
 
-    recognition.lang = "en-US";
-    recognition.interimResults = false;
+// --- Voice ---
+function speak(text){
+  const msg=new SpeechSynthesisUtterance();
+  msg.text=text;
+  msg.rate=1;
+  msg.pitch=1;
+  msg.voice=speechSynthesis.getVoices()[0];
+  speechSynthesis.speak(msg);
+}
 
-    function speak(text) {
-        const speech = new SpeechSynthesisUtterance(text);
-        speech.rate = 1;
-        speech.pitch = 1;
-        speech.volume = 1;
-        window.speechSynthesis.speak(speech);
+// --- Commands ---
+function processCommand(command){
+  command=command.toLowerCase();
+  if(command.includes("hello")){
+    speak("Hello sir, I am Jarvis. How can I assist you?");
+  } else if(command.includes("time")){
+    speak("The time is "+new Date().toLocaleTimeString());
+  } else if(command.includes("youtube")){
+    speak("Opening YouTube");
+    window.open("https://www.youtube.com","_blank");
+  } else if(command.includes("google")){
+    speak("Opening Google");
+    window.open("https://www.google.com","_blank");
+  } else if(command.includes("weather")){
+    speak("Opening weather");
+    window.open("https://www.google.com/search?q=weather","_blank");
+  } else if(command.includes("timer")){
+    speak("Timer started for 5 seconds");
+    setTimeout(()=>speak("Timer finished"),5000);
+  } else if(command.includes("note")){
+    let note=prompt("What should I note?");
+    if(note){ speak("Note saved: "+note); }
+  } else{
+    speak("Sorry sir, I did not understand that");
+  }
+}
+
+// --- Recognition ---
+let recognition;
+let listening=false;
+const statusEl=document.getElementById("status");
+
+function startRecognition(){
+  if(!('webkitSpeechRecognition' in window)){
+    alert("Your browser does not support speech recognition");
+    return;
+  }
+  recognition=new webkitSpeechRecognition();
+  recognition.continuous=true;
+  recognition.interimResults=false;
+  recognition.lang="en-IN";
+
+  recognition.onstart=()=>{listening=true;statusEl.innerText="Listening...";}
+  recognition.onend=()=>{listening=false;statusEl.innerText='Say "Hey Jarvis" or tap ACTIVATE';}
+  recognition.onresult=(event)=>{
+    const last=event.results.length-1;
+    const command=event.results[last][0].transcript;
+    statusEl.innerText="Heard: "+command;
+    if(command.toLowerCase().includes("hey jarvis")){
+      speak("Yes sir, I am ready");
+    } else{
+      processCommand(command);
     }
+  };
+  recognition.start();
+}
 
-    function startJarvis() {
-        status.textContent = "Listening...";
-        recognition.start();
-    }
+document.getElementById("activateBtn").onclick=()=>{
+  if(!listening) startRecognition();
+  else recognition.stop();
+};
 
-    recognition.onresult = function(event) {
-        const command = event.results[0][0].transcript.toLowerCase();
-        status.textContent = "You said: " + command;
-        processCommand(command);
-    };
-
-    recognition.onerror = function() {
-        status.textContent = "Voice error, try again";
-    };
-
-    function processCommand(command) {
-
-        if (command.includes("hello")) {
-            speak("Hello sir, Jarvis at your service");
-        }
-
-        else if (command.includes("your name")) {
-            speak("I am Jarvis, your personal AI assistant");
-        }
-
-        else if (command.includes("time")) {
-            let time = new Date().toLocaleTimeString();
-            speak("Current time is " + time);
-        }
-
-        else if (command.includes("date")) {
-            let date = new Date().toDateString();
-            speak("Today's date is " + date);
-        }
-
-        else if (command.includes("open youtube")) {
-            speak("Opening YouTube");
-            window.open("https://youtube.com", "_blank");
-        }
-
-        else if (command.includes("open google")) {
-            speak("Opening Google");
-            window.open("https://google.com", "_blank");
-        }
-
-        else if (command.includes("who made you")) {
-            speak("I was created by you, sir");
-        }
-
-        else {
-            speak("Sorry sir, I did not understand that command");
-        }
-    }
+// --- Wake word simulation ---
+setInterval(()=>{
+  if(!listening && Math.random()<0.01){
+    speak("Listening sir...");
+    startRecognition();
+  }
+},3000);
 </script>
-
 </body>
 </html>
