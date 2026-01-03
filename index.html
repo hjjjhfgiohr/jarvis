@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JARVIS AI</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+        background: radial-gradient(circle at top, #0f2027, #000);
+        color: #00eaff;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .jarvis {
+        width: 95%;
+        max-width: 400px;
+        text-align: center;
+        padding: 25px;
+        border-radius: 20px;
+        background: rgba(0, 0, 0, 0.6);
+        box-shadow: 0 0 25px rgba(0, 234, 255, 0.3);
+    }
+
+    .ring {
+        width: 180px;
+        height: 180px;
+        margin: 20px auto;
+        border-radius: 50%;
+        border: 4px solid transparent;
+        border-top: 4px solid #00eaff;
+        border-bottom: 4px solid #00eaff;
+        animation: spin 3s linear infinite;
+        box-shadow: 0 0 25px #00eaff;
+    }
+
+    @keyframes spin {
+        100% { transform: rotate(360deg); }
+    }
+
+    h1 {
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+    }
+
+    #status {
+        font-size: 14px;
+        opacity: 0.9;
+        min-height: 20px;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 14px 28px;
+        font-size: 16px;
+        background: transparent;
+        color: #00eaff;
+        border: 2px solid #00eaff;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    button::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #00eaff;
+        opacity: 0;
+        transition: 0.3s;
+    }
+
+    button:hover::before {
+        opacity: 0.15;
+    }
+
+    button:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 20px #00eaff;
+    }
+
+    footer {
+        margin-top: 15px;
+        font-size: 12px;
+        opacity: 0.6;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="jarvis">
+    <h1>JARVIS</h1>
+    <div class="ring"></div>
+    <p id="status">System Idle</p>
+    <button onclick="startJarvis()">ACTIVATE JARVIS</button>
+    <footer>AI Assistant Online</footer>
+</div>
+
+<script>
+    const status = document.getElementById("status");
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+
+    function speak(text) {
+        const speech = new SpeechSynthesisUtterance(text);
+        speech.rate = 1;
+        speech.pitch = 1;
+        speech.volume = 1;
+        window.speechSynthesis.speak(speech);
+    }
+
+    function startJarvis() {
+        status.textContent = "Listening...";
+        recognition.start();
+    }
+
+    recognition.onresult = function(event) {
+        const command = event.results[0][0].transcript.toLowerCase();
+        status.textContent = "You said: " + command;
+        processCommand(command);
+    };
+
+    recognition.onerror = function() {
+        status.textContent = "Voice error, try again";
+    };
+
+    function processCommand(command) {
+
+        if (command.includes("hello")) {
+            speak("Hello sir, Jarvis at your service");
+        }
+
+        else if (command.includes("your name")) {
+            speak("I am Jarvis, your personal AI assistant");
+        }
+
+        else if (command.includes("time")) {
+            let time = new Date().toLocaleTimeString();
+            speak("Current time is " + time);
+        }
+
+        else if (command.includes("date")) {
+            let date = new Date().toDateString();
+            speak("Today's date is " + date);
+        }
+
+        else if (command.includes("open youtube")) {
+            speak("Opening YouTube");
+            window.open("https://youtube.com", "_blank");
+        }
+
+        else if (command.includes("open google")) {
+            speak("Opening Google");
+            window.open("https://google.com", "_blank");
+        }
+
+        else if (command.includes("who made you")) {
+            speak("I was created by you, sir");
+        }
+
+        else {
+            speak("Sorry sir, I did not understand that command");
+        }
+    }
+</script>
+
+</body>
+</html>
